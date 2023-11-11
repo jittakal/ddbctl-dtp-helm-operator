@@ -1,0 +1,6 @@
+# Use the 'create api' subcommand to add watches to this file.
+- group: ddbctl.dtp.charts.operators.jittakal.io
+  version: v1alpha1
+  kind: DdbctlDtpJob
+  chart: helm-charts/ddbctl-dtp-job
+#+kubebuilder:scaffold:watch

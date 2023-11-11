@@ -1,0 +1,11 @@
+apiVersion: ddbctl.dtp.charts.operators.jittakal.io/v1alpha1
+kind: DdbctlDtpJob
+metadata:
+  name: ddbctldtpjob-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/ddbctl-dtp-job/values.yaml
+  ddbCtlDtpJob:
+    awsRegion: us-east-1
+    endpointURL: http://aws-dynamodb-local.default.svc.cluster.local:8000
+    partitionValue: TESTTENANTID
+    tableName: Orders

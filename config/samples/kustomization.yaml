@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- ddbctl.dtp.charts_v1alpha1_ddbctldtpjob.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples

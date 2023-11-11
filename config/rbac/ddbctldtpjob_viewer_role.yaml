@@ -1,0 +1,27 @@
+# permissions for end users to view ddbctldtpjobs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: ddbctldtpjob-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: ddbctl-dtp-helm-operator
+    app.kubernetes.io/part-of: ddbctl-dtp-helm-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: ddbctldtpjob-viewer-role
+rules:
+- apiGroups:
+  - ddbctl.dtp.charts.operators.jittakal.io
+  resources:
+  - ddbctldtpjobs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ddbctl.dtp.charts.operators.jittakal.io
+  resources:
+  - ddbctldtpjobs/status
+  verbs:
+  - get
