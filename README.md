@@ -60,6 +60,7 @@ $ kubectl get deployment -n ddbctl-dtp-helm-operator-system # deployment for con
 
 $ kubectl get pods -n ddbctl-dtp-helm-operator-system # pod for controller-manager
 
+$ kubectl get crd # crd entry for ddbctldtpjobs
 ```
 
 - Sample DynamoDB Delete Table Partition Data Job
