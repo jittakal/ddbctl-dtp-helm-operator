@@ -71,3 +71,7 @@ $ kubectl apply -f config/samples/ddbctl.dtp.charts_v1alpha1_ddbctldtpjob.yaml
 
 $ kubectl get pods # Job pod should be running/completed
 ```
+
+## Reference
+
+- [DynamoDB Delete Parition Data Library](https://github.com/jittakal/dynamo-partition-delete)
