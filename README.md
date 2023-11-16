@@ -2,75 +2,68 @@
 
 DynamoDB Delete Table Partition Data Helm Operator
 
-## Pre-requisite
+**Clone ddbctl-dtp-operator git repository:**
 
 ```bash
-$ brew install operator-sdk
-```
-
-## Steps
-
-Steps followed to create Helm Operator using operator-framework
-
-- Clone empty Github Repository
-
-```bash
-$ cd ~/workspace/git.ws
-$ git clone https://github.com/jittakal/ddbctl-dtp-helm-operator.git
-```
-
-- Helm Operator - Init (Used existing Helm Chart)
-
-```bash
+$ cd ~\workspace\git.ws
+$ git clone https://github.com/jittakal/ddbctl-dtp-helm-operator
 $ cd ddbctl-dtp-helm-operator
-$ operator-sdk init --plugins helm.sdk.operatorframework.io/v1 \
-    --domain operators.jittakal.io \
-    --group ddbctl.dtp.charts \
-    --helm-chart ~/Workspaces/git.ws/dynamo-partition-delete/helm/ddbctl-dtp-job/
+```
+**Deploy DdbctlDtpJob CRD:**
+
+```bash
+make deploy
 ```
 
-- Modify the Makerfile
+Verify the helm operator deployment
+
+```bash
+$ kubectl get crd # new entry for ddbctldtpjob.dbctl.dtp.charts.operators.jittakal.io/v1alpha1
+
+$ kubectl get namespaces # new entry for ddbctl-dtp-helm-operator-system
+
+$ kubectl get pods -n ddbctl-dtp-helm-operator-system
+
+$ kubctl logs -f <<pod-name-from-above-command>> -n ddbctl-dtp-helm-operator-system
+```
+
+## How it Works
+
+The `ddbctl-dtp-heml-operator` extends the functionality of Kubernetes by introducing a custom resource, DdbctlDtpJob based on Helm Charts. This resource allows you to express your intent to delete a specific partition in a DynamoDB table directly through Kubernetes manifests.
 
 ```yaml
-IMAGE_TAG_BASE ?= docker.io/jittakal/ddbctl-dtp-helm-operator
-IMG ?= $(IMAGE_TAG_BASE):$(VERSION)
+apiVersion: ddbctl.dtp.charts.operators.jittakal.io/v1alpha1
+kind: DdbctlDtpJob
+metadata:
+  name: ddbctldtpjob-sample
+spec:
+  ddbCtlDtpJob:
+    awsRegion: us-east-1
+    endpointURL: http://aws-dynamhttp://dynamodb.local:8000
+    partitionValue: partition-key-value
+    tableName: my-dynamodb-table
 ```
 
-- Build Operator docker image and publish to docker.io repository
+- Customer Resource for DdbctlDtpJob CRD
 
 ```bash
-$ make docker-build docker-push
+$ kubectl create -f delete_partition_data_tablename_job.yaml
+
+$ # Sample
+$ kubectl create -f config/samples/ddbctl.dtp.charts_v1alpha1_ddbctldtpjob.yaml
 ```
 
-- Run Operator - locally
+- View Delete Table Partition Data Job - Summary
 
 ```bash
-$ make install run
-```
-- Run Operator - inside cluster
+$ kubectl get jobs # default - namespace
 
-```bash
-$ make deploy
+$ kubectl get pods
 
-# Verify the deployment
+$ kubectl logs <<podname-of-delete-table-partition-data-job>> 
 
-$ kubectl get namespaces # new namespace - ddbctl-dtp-helm-operator-system
-
-$ kubectl get deployment -n ddbctl-dtp-helm-operator-system # deployment for controller manager
-
-$ kubectl get pods -n ddbctl-dtp-helm-operator-system # pod for controller-manager
-
-$ kubectl get crd # crd entry for ddbctldtpjobs
-```
-
-- Sample DynamoDB Delete Table Partition Data Job
-
-```bash
-$ kubectl apply -f config/samples/ddbctl.dtp.charts_v1alpha1_ddbctldtpjob.yaml
-
-# Verify the Job deployment
-
-$ kubectl get pods # Job pod should be running/completed
+$ # verify log table name and number of records delete 
+$ # delete summary report on job completion
 ```
 
 ## Reference
